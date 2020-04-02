@@ -1,0 +1,72 @@
+// Created on Mon March 23 2020
+
+int r_motor = 2;
+int l_motor = 0;
+int r_bump = 9;
+int mid_bump = 1;
+int l_bump = 8;
+int r_reflect = 6;
+int l_reflect = 5;
+int speed = 70;
+int slow_speed = 20;
+int counter = 0;
+
+void forward() {											//Robot goes forward
+	motor(r_motor, speed);
+	motor(l_motor, speed); 
+	}
+	
+void right() {												 //Robot turns right 
+	motor(l_motor, speed);
+	motor(r_motor, slow_speed);
+	}
+	
+void left(){												//Robot turns left
+    motor(r_motor,speed);
+    motor(l_motor, -speed);
+	}
+
+void find_line(){
+	while (digital(l_bump) == 0) {			
+		forward();
+		if (analog(l_reflect) > 400) {			
+			right();
+			msleep(200);
+			}
+		if (digital(r_bump) == 1) {
+			printf("left veer\n");
+			left();
+			msleep(100);
+			}
+	}	
+ao();	
+}
+
+void wall_follow(){
+	while(counter < 9) {
+		forward();
+       if (analog(r_motor) > 150){
+           right();
+		   msleep(50);
+       }
+      if (analog(r_motor) < 150){
+           left();
+			msleep(50);
+       }
+	   if (analog(r_reflect) > 300) {
+		   printf("black line\n");
+		   counter ++ ;
+		   forward();
+		   msleep(50);
+	   }
+   }
+}
+
+
+int main()
+{
+	printf("Hello, World!\n");
+	wall_follow();
+
+	return 0;
+}
